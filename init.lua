@@ -155,7 +155,21 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
-
+--[[
+vim.api.nvim_create_augroup('neotree_autoopen', { clear = true })
+vim.api.nvim_create_autocmd('BufRead', { -- Changed from BufReadPre
+  desc = 'Open neo-tree on enter',
+  group = 'neotree_autoopen',
+  once = true,
+  callback = function()
+    if not vim.g.neotree_opened then
+      vim.cmd 'Neotree show'
+      vim.g.neotree_opened = true
+    end
+  end,
+})
+]]
+--
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -267,7 +281,25 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
+  -- lazy.nvim
+  {
+    'folke/todo-comments.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {},
+  },
+  {
+    'dnlhc/glance.nvim',
+    cmd = 'Glance',
+  },
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify',
+    },
+  },
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
@@ -782,9 +814,20 @@ require('lazy').setup({
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
+      -- local lspkind = require 'lspkind'
       luasnip.config.setup {}
 
       cmp.setup {
+        -- formatting = {
+        -- format = lspkind.cmp_format {
+        -- mode = 'symbol',
+        -- maxwidth = {
+        -- menu = 50,
+        -- abbr = 50,
+        -- },
+        -- ellipsis_char = '…',
+        -- },
+        -- },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -907,21 +950,24 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
+      -- local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- ---@diagnostic disable-next-line: duplicate-set-field
+      -- statusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
+  },
+  {
+    'beauwilliams/statusline.lua',
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
