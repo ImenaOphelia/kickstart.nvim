@@ -153,6 +153,9 @@ vim.opt.inccommand = 'split'
 -- Show which line your cursor is on
 vim.opt.cursorline = true
 
+-- Enable true color
+vim.opt.termguicolors = true
+
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 --[[
@@ -288,6 +291,16 @@ require('lazy').setup({
     opts = {},
   },
   {
+    'uga-rosa/ccc.nvim',
+    lazy = false,
+    opts = {
+      highlighter = {
+        auto_enable = true,
+        lsp = true,
+      },
+    },
+  },
+  {
     'dnlhc/glance.nvim',
     cmd = 'Glance',
   },
@@ -356,14 +369,12 @@ require('lazy').setup({
       },
     },
   },
-
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
   -- you do for a plugin at the top level, you can do for a dependency.
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -477,6 +488,14 @@ require('lazy').setup({
   {
     'folke/twilight.nvim',
   },
+  {
+    'm4xshen/hardtime.nvim',
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    opts = {},
+  },
+  { 'nvzone/volt', lazy = true },
+  { 'nvzone/menu', lazy = true },
+  { 'lambdalisue/vim-suda' },
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -906,13 +925,14 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'catppuccin/nvim',
+    'ellisonleao/gruvbox.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'catppuccin-mocha'
+      vim.o.background = 'dark'
+      vim.cmd.colorscheme 'gruvbox'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -1025,7 +1045,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  --  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
